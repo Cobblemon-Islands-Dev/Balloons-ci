@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomModelData;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public record ConfiguredCategory(
         String title,
         ResourceLocation item,
         List<String> lore,
-        ResourceLocation model,
+        Integer customModelData,
         boolean glint,
         Map<ResourceLocation, ConfiguredBalloon> balloons
 ) {
@@ -30,11 +31,11 @@ public record ConfiguredCategory(
         if (item == null)
             itemStack = Items.ROTTEN_FLESH.getDefaultInstance();
         else
-            itemStack = BuiltInRegistries.ITEM.getValue(item).getDefaultInstance();
+            itemStack = BuiltInRegistries.ITEM.get(item).getDefaultInstance();
 
         if (title != null) itemStack.set(DataComponents.ITEM_NAME, Component.empty().append(Component.empty().withStyle(ConfiguredBalloon.EMPTY).append(TextUtil.parse(title))));
-        if (model != null)
-            itemStack.set(DataComponents.ITEM_MODEL, model);
+        if (customModelData != null && customModelData != -1)
+            itemStack.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(customModelData));
 
         return itemStack;
     }
@@ -57,7 +58,7 @@ public record ConfiguredCategory(
         private String title;
         private ResourceLocation item;
         private final List<String> lore = new ObjectArrayList<>();
-        private ResourceLocation model;
+        private int customModelData;
         private boolean glint;
         private final Map<ResourceLocation, ConfiguredBalloon> balloons = new Object2ObjectOpenHashMap<>();
 
@@ -78,8 +79,8 @@ public record ConfiguredCategory(
             return this;
         }
 
-        public Builder setModel(ResourceLocation model) {
-            this.model = model;
+        public Builder setCustomModelData(int customModelData) {
+            this.customModelData = customModelData;
             return this;
         }
 
@@ -114,7 +115,7 @@ public record ConfiguredCategory(
                     title,
                     item,
                     lore,
-                    model,
+                    customModelData,
                     glint,
                     ImmutableMap.copyOf(balloons) // immutable copy
             );

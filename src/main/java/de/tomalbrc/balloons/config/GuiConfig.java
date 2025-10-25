@@ -13,7 +13,7 @@ public class GuiConfig {
     public ResourceLocation backButtonItem = Items.ARROW.builtInRegistryHolder().key().location();
     public Vector2i backButtonLocation = new Vector2i(1, 1);
     public ItemStack backItem() {
-        var item = BuiltInRegistries.ITEM.getValue(backButtonItem).getDefaultInstance();
+        var item = BuiltInRegistries.ITEM.get(backButtonItem).getDefaultInstance();
         item.set(DataComponents.ITEM_NAME, TextUtil.parse(ModConfig.getInstance().messages.back));
         return item;
     }
@@ -28,13 +28,13 @@ public class GuiConfig {
     public Vector2i nextButtonLocation = new Vector2i(9, 6);
 
     public ItemStack prevItem() {
-        var item = BuiltInRegistries.ITEM.getValue(prevButtonItem).getDefaultInstance();
+        var item = BuiltInRegistries.ITEM.get(prevButtonItem).getDefaultInstance();
         item.set(DataComponents.ITEM_NAME, TextUtil.parse(ModConfig.getInstance().messages.prev));
         return item;
     }
 
     public ItemStack nextItem() {
-        var item = BuiltInRegistries.ITEM.getValue(nextButtonItem).getDefaultInstance();
+        var item = BuiltInRegistries.ITEM.get(nextButtonItem).getDefaultInstance();
         item.set(DataComponents.ITEM_NAME, TextUtil.parse(ModConfig.getInstance().messages.next));
         return item;
     }
@@ -50,7 +50,7 @@ public class GuiConfig {
     public ResourceLocation browseButtonItem = Items.CHEST.builtInRegistryHolder().key().location();
     public Vector2i browseButtonLocation = new Vector2i(1, 6);
     public ItemStack browseItem() {
-        var item = BuiltInRegistries.ITEM.getValue(browseButtonItem).getDefaultInstance();
+        var item = BuiltInRegistries.ITEM.get(browseButtonItem).getDefaultInstance();
         item.set(DataComponents.ITEM_NAME, TextUtil.parse(ModConfig.getInstance().messages.browse));
         return item;
     }
@@ -59,7 +59,7 @@ public class GuiConfig {
     public Vector2i confirmButtonLocation = new Vector2i(7, 1);
     public Vector2i cancelButtonLocation = new Vector2i(3, 1);
     public ItemStack confirmItem() {
-        var item = BuiltInRegistries.ITEM.getValue(confirmButtonItem).getDefaultInstance();
+        var item = BuiltInRegistries.ITEM.get(confirmButtonItem).getDefaultInstance();
         item.set(DataComponents.ITEM_NAME, TextUtil.parse(ModConfig.getInstance().messages.confirm));
         return item;
     }

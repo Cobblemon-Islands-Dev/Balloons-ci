@@ -6,7 +6,7 @@ import de.tomalbrc.balloons.Balloons;
 import de.tomalbrc.balloons.config.ModConfig;
 import de.tomalbrc.balloons.util.BalloonSuggestionProvider;
 import de.tomalbrc.balloons.util.StorageUtil;
-import de.tomalbrc.bil.util.Permissions;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceLocationArgument;

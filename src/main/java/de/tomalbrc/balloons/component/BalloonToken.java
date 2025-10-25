@@ -6,7 +6,6 @@ import de.tomalbrc.balloons.Balloons;
 import de.tomalbrc.balloons.config.ModConfig;
 import de.tomalbrc.balloons.util.TextUtil;
 import me.lucko.fabric.api.permissions.v0.Permissions;
-import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,7 +30,7 @@ public record BalloonToken(
     }
 
     @Override
-    public void addToTooltip(Item.TooltipContext tooltipContext, Consumer<Component> consumer, TooltipFlag tooltipFlag, DataComponentGetter dataComponentGetter) {
+    public void addToTooltip(Item.TooltipContext tooltipContext, Consumer<Component> consumer, TooltipFlag tooltipFlag) {
         consumer.accept(TextUtil.parse(String.format(ModConfig.getInstance().messages.componentTooltip, Balloons.all().get(this.id).title())));
     }
 }

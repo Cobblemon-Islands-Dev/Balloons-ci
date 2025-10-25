@@ -33,7 +33,7 @@ public class FilamentCompat {
         ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
             for (Map.Entry<ResourceLocation, ConfiguredBalloon> entry : Balloons.all().entrySet()) {
                 if (entry.getValue().item() == null)
-                    entry.getValue().setItem(BuiltInRegistries.ITEM.getValue(entry.getKey()).getDefaultInstance());
+                    entry.getValue().setItem(BuiltInRegistries.ITEM.get(entry.getKey()).getDefaultInstance());
             }
         });
     }

@@ -4,6 +4,7 @@ import de.tomalbrc.balloons.component.BalloonProperties;
 import de.tomalbrc.bil.core.model.Model;
 import eu.pb4.polymer.virtualentity.api.ElementHolder;
 import eu.pb4.polymer.virtualentity.api.attachment.EntityAttachment;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -23,8 +24,8 @@ public class VirtualBalloon {
         return this.animatedHolder;
     }
 
-    public void setModel(Model model, boolean leashed) {
-        this.animatedHolder = new AnimatedBalloonHolder(model, leashed);
+    public void setModel(ServerLevel serverLevel, Model model, boolean leashed) {
+        this.animatedHolder = new AnimatedBalloonHolder(serverLevel, model, leashed);
     }
 
     public int getLeashedEntityId() {

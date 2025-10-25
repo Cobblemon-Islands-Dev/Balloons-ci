@@ -2,7 +2,7 @@ package de.tomalbrc.balloons.impl;
 
 import de.tomalbrc.balloons.util.ClientboundSetEntityLinkPacketExt;
 import de.tomalbrc.bil.core.element.CollisionElement;
-import de.tomalbrc.bil.core.holder.base.SimpleAnimatedHolder;
+import de.tomalbrc.bil.core.holder.base.AbstractAnimationHolder;
 import de.tomalbrc.bil.core.holder.wrapper.Bone;
 import de.tomalbrc.bil.core.holder.wrapper.DisplayWrapper;
 import de.tomalbrc.bil.core.model.Model;
@@ -12,28 +12,32 @@ import eu.pb4.polymer.virtualentity.api.elements.GenericEntityElement;
 import eu.pb4.polymer.virtualentity.api.elements.VirtualElement;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBundlePacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityLinkPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
+import org.joml.*;
 
+import java.lang.Math;
 import java.util.List;
 
-public class AnimatedBalloonHolder extends SimpleAnimatedHolder {
+public class AnimatedBalloonHolder extends AbstractAnimationHolder {
     private final GenericEntityElement leashElement;
     private float yaw, pitch;
     private final boolean leash;
 
-    protected AnimatedBalloonHolder(Model model, boolean leash) {
-        super(model);
+    protected AnimatedBalloonHolder(ServerLevel serverLevel, Model model, boolean leash) {
+        super(model, serverLevel);
         this.leash = leash;
         var slime =  new CollisionElement(VirtualElement.InteractionHandler.EMPTY);
         slime.setSize(1);
@@ -46,7 +50,7 @@ public class AnimatedBalloonHolder extends SimpleAnimatedHolder {
         var value = super.startWatching(player);
         if (value) {
             var ids = new IntArrayList();
-            for (Bone<?> bone : this.bones) {
+            for (Bone bone : this.bones) {
                 ids.add(bone.element().getEntityId());
             }
 
@@ -88,19 +92,58 @@ public class AnimatedBalloonHolder extends SimpleAnimatedHolder {
     }
 
     @Override
-    public void updateElement(ServerPlayer serverPlayer, DisplayWrapper<?> display, @Nullable Pose pose) {
+    public void updateElement(DisplayWrapper<?> display, @Nullable Pose pose) {
         if (pose != null) {
-            this.applyPose(serverPlayer, pose, display);
+            this.applyPose(pose, display);
         } else {
-            this.applyPose(serverPlayer, display.getDefaultPose(), display);
+            this.applyPose(display.getDefaultPose(), display);
         }
     }
 
     @Override
-    protected void applyPose(ServerPlayer serverPlayer, Pose pose, DisplayWrapper<?> display) {
-        var m = new Matrix4f().rotateLocalX((float) Math.toRadians(-pitch)).rotateLocalY((float) Math.toRadians(-yaw)).mul(pose.matrix());
+    protected void applyPose(Pose pose, DisplayWrapper<?> display) {
+        Matrix4f matrix = compose(pose.readOnlyTranslation(), pose.readOnlyLeftRotation(), pose.readOnlyScale(), pose.readOnlyRightRotation());
+
+        Matrix4f m = new Matrix4f().rotateLocalX((float) Math.toRadians(-pitch)).rotateLocalY((float) Math.toRadians(-yaw)).mul(matrix);
         m.translateLocal(0, -0.1f, 0);
-        display.element().setTransformation(serverPlayer, m);
-        display.element().startInterpolationIfDirty(serverPlayer);
+        display.element().setTransformation(m);
+        display.element().startInterpolationIfDirty();
+    }
+
+    @Override
+    public CommandSourceStack createCommandSourceStack() {
+        String name = String.format("BalloonHolder[%.1f, %.1f, %.1f]", this.getPos().x, this.getPos().y, this.getPos().z);
+        return new CommandSourceStack(
+                this.getServer(),
+                this.getPos(),
+                Vec2.ZERO,
+                this.level,
+                0,
+                name,
+                Component.literal(name),
+                this.getServer(),
+                null
+        );
+    }
+
+    private static Matrix4f compose(@Nullable Vector3fc vector3f, @Nullable Quaternionfc quaternionf, @Nullable Vector3fc vector3f2, @Nullable Quaternionfc quaternionf2) {
+        Matrix4f matrix4f = new Matrix4f();
+        if (vector3f != null) {
+            matrix4f.translation(vector3f);
+        }
+
+        if (quaternionf != null) {
+            matrix4f.rotate(quaternionf);
+        }
+
+        if (vector3f2 != null) {
+            matrix4f.scale(vector3f2);
+        }
+
+        if (quaternionf2 != null) {
+            matrix4f.rotate(quaternionf2);
+        }
+
+        return matrix4f;
     }
 }

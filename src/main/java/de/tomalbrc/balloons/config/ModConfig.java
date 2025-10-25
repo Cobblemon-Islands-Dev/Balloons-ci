@@ -7,8 +7,8 @@ import de.tomalbrc.balloons.Balloons;
 import de.tomalbrc.balloons.Categories;
 import de.tomalbrc.balloons.component.BalloonProperties;
 import de.tomalbrc.balloons.storage.DatabaseConfig;
+import de.tomalbrc.balloons.util.SimpleCodecDeserializer;
 import de.tomalbrc.balloons.util.StorageUtil;
-import de.tomalbrc.bil.json.SimpleCodecDeserializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.item.ItemStack;
 
@@ -76,8 +76,10 @@ public class ModConfig {
             ModConfig.instance = JSON.fromJson(new FileReader(ModConfig.CONFIG_FILE_PATH.toFile()), ModConfig.class);
 
             if (instance != null) {
-                Balloons.STORAGE.close();
-                Balloons.STORAGE = null;
+                if (Balloons.STORAGE != null) {
+                    Balloons.STORAGE.close();
+                    Balloons.STORAGE = null;
+                }
                 Balloons.STORAGE = Balloons.getStorage();
             }
         } catch (FileNotFoundException e) {

@@ -63,7 +63,7 @@ public class ConfirmationGui extends SimpleGui {
                 player.addItem(item);
 
                 if (!item.isEmpty() && item.getCount() > 0) {
-                    player.spawnAtLocation(player.level(), item);
+                    player.spawnAtLocation(item);
                 }
             }
         }

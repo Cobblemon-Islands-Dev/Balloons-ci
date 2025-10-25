@@ -28,6 +28,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.LivingEntity;
@@ -136,10 +137,13 @@ public class Balloons implements ModInitializer {
     }
 
     private static void spawnBalloon(LivingEntity livingEntity, ResourceLocation balloonId) {
+        if (!(livingEntity.level() instanceof ServerLevel serverLevel))
+            return;
+
         var balloon = Balloons.all().get(balloonId);
         Model model = Models.getModel(balloon.data().model());
         var virtualBalloon = new VirtualBalloon(livingEntity);
-        virtualBalloon.setModel(model, balloon.data().showLeash());
+        virtualBalloon.setModel(serverLevel, model, balloon.data().showLeash());
 
         var spawnData = SPAWNED_BALLOONS.computeIfAbsent(livingEntity.getUUID(), (living) -> new Object2ObjectArrayMap<>());
         spawnData.put(balloonId, virtualBalloon);
