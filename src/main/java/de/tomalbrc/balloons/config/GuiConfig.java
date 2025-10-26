@@ -39,7 +39,7 @@ public class GuiConfig {
     }
 
     public int browseMenuHeight = 6;
-    public String browseMenuTitle = "Browse Emotes";
+    public String browseMenuTitle = "Browse Balloons";
 
     public int confirmationMenuHeight = 1;
     public String confirmationMenuTitle = "Confirm";

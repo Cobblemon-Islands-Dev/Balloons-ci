@@ -35,7 +35,7 @@ config/balloons/<model>.bbmodel
 
 ---
 
-### ⚙️ Config file
+### Config file
 
 The mod reads balloon definitions from:
 
@@ -47,39 +47,123 @@ Here’s a minimal example:
 
 ```json
 {
-  "mongo_db": {
-    "enabled": true,
-    "host": "127.0.0.1",
-    "port": 27017,
-    "collection": "balloons",
-    "username": "",
-    "password": "",
-    "database": "game",
-    "authSource": "admin",
-    "useSSL": false
+  "permissions": {
+    "balloons.reload": 2,
+    "balloons.list": 2,
+    "balloons.command": 2,
+    "balloons.direct": 2,
+    "balloons.give": 2,
+    "balloons.remove": 2
+  },
+  "messages": {
+    "player-not-found": "Player not found",
+    "back": "Back",
+    "browse": "Browse All",
+    "prev": "Previous Page",
+    "next": "Next Page",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "component-tooltip": "Balloon: %s",
+    "already-owning": "<green>You own this balloon</green>",
+    "added": "%s was added to your balloons!",
+    "equip-tooltip": "<green>🎈</green> Press <keybind:key.attack> to equip",
+    "unequip-tooltip": "<color:#800080>↔</color> Press <keybind:key.use> to unequip",
+    "get-item-tooltip": "<color:#802080>↔</color> Press <keybind:key.use> to get item"
+  },
+  "gui": {
+    "add-back-button": true,
+    "back-button-item": "minecraft:arrow",
+    "back-button-location": [
+      1,
+      1
+    ],
+    "selection-menu-height": 6,
+    "selection-menu-title": "Select Balloon",
+    "prev-button-item": "minecraft:arrow",
+    "next-button-item": "minecraft:arrow",
+    "prev-button-location": [
+      8,
+      6
+    ],
+    "next-button-location": [
+      9,
+      6
+    ],
+    "browse-menu-height": 6,
+    "browse-menu-title": "Browse Balloons",
+    "confirmation-menu-height": 1,
+    "confirmation-menu-title": "Confirm",
+    "add-browse-button": true,
+    "browse-button-item": "minecraft:chest",
+    "browse-button-location": [
+      1,
+      6
+    ],
+    "confirm-button-item": "minecraft:emerald",
+    "confirm-button-location": [
+      7,
+      1
+    ],
+    "cancel-button-location": [
+      3,
+      1
+    ]
+  },
+  "storage-type": "SQLITE",
+  "database": {
+    "host": "localhost",
+    "port": 3306,
+    "user": "username",
+    "password": "secret",
+    "filepath": "cosmetic.sqlite",
+    "max-pool-size": 10,
+    "ssl-enabled": false,
+    "database-name": "emotes_db",
+    "connection-timeout": 30000,
+    "idle-timeout": 600000,
+    "keepalive-time": 300000,
+    "validation-timeout": 5000,
+    "use-srv": false
   },
   "balloons": [
     {
       "id": "test:one",
       "item": {
-        "count": 1,
-        "id": "minecraft:cobblestone"
+        "id": "minecraft:cobblestone",
+        "count": 1
       },
       "data": {
-        "model": "flower_balloon",
-        "animation": "idle"
-      }
+        "model": "flower_balloon"
+      },
+      "glint": false,
+      "lore": [],
+      "permission-level": 0
     },
     {
       "id": "test:two",
       "item": {
-        "count": 1,
-        "id": "minecraft:stone"
+        "id": "minecraft:stone",
+        "count": 1
       },
       "data": {
-        "model": "frog_balloon",
-        "animation": "idle"
-      }
+        "model": "satyr_balloon"
+      },
+      "glint": false,
+      "lore": [],
+      "permission-level": 0
+    },
+    {
+      "id": "test:three",
+      "item": {
+        "id": "minecraft:stone",
+        "count": 1
+      },
+      "data": {
+        "model": "apple_balloon"
+      },
+      "glint": false,
+      "lore": [],
+      "permission-level": 0
     }
   ]
 }
