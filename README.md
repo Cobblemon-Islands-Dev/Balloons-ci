@@ -43,6 +43,26 @@ The mod reads balloon definitions from:
 config/balloons.json
 ```
 
+**Storage:**
+
+* `storage-type`: Can be `LPMETA`, `MONGODB`, `MARIADB`, `POSTGRESQL`, or `SQLITE`
+* `database`: Defines connection details for databases
+
+**GUI:**
+
+* Customize button positions, items, and menu layouts
+* Adjust menu heights and titles
+* Toggle confirmation menus
+
+** Permissions: **
+
+Allows to assign vanilla permission levels for the luckperm nodes.
+
+** Messages: **
+
+Player facing messages / strings
+
+
 Here’s a minimal example:
 
 ```json
@@ -186,15 +206,6 @@ Each balloon entry includes:
 
 ---
 
-### 🔧 MongoDB (optional)
-
-If you want the players active balloon to persist across multiple servers (e.g. in a network), you can enable MongoDB in the config.
-
-If `"enabled"` is true, the mod will sync player balloon state using the configured database.  
-If `username` and `password` are empty, it will try to connect without authentication.
-
----
-
 # Commands
 
 This mod adds simple commands to allow permanent attachment of the balloon to the player and to remove it.
@@ -211,14 +222,24 @@ Example:
 ```
 
 This will attach the balloon with ID `test:one` (from your config) to the player.
-The balloon will respawn immediately after the player respawns
+The balloon will respawn immediately after the player respawns.
+
+To add balloons to the players available selection, use `/balloon give <player> <id or *>`
+To remove balloons from the players available selection, use `/balloon remove <player> <id or *>`
+
+`/balloon` will display the selection UI
+
+`/balloon <id>` run by a player will set the balloon with the given id as active
+
+`/balloon reload` to reload the config and db connection
 
 ---
 
-# Data storage
+# Components
 
-- By default, balloon state is stored in each player’s **Overworld player data**.
-- If MongoDB is enabled, the mod uses that instead — useful for syncing across multiple servers.
+- `balloons:token`: For voucher items that can be redeemed by using the item (the item won't be consumed if the player already has the balloon available to them)
+
+- `balloons:balloon`: For items that should display the balloon if worn as equipment or trinket. Has the same fields the "data" object in the config has, for example "model", "animation", "show_leash", etc.
 
 ---
 
