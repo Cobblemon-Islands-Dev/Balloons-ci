@@ -19,11 +19,10 @@ public class GuiConfig {
     }
 
     public int selectionMenuHeight = 6;
-    public String selectionMenuTitle = "Select Emote";
+    public String selectionMenuTitle = "Select Balloon";
 
     public ResourceLocation prevButtonItem = Items.ARROW.builtInRegistryHolder().key().location();
     public ResourceLocation nextButtonItem = Items.ARROW.builtInRegistryHolder().key().location();
-    // default to bottom-right area (1-based coords as used elsewhere)
     public Vector2i prevButtonLocation = new Vector2i(8, 6);
     public Vector2i nextButtonLocation = new Vector2i(9, 6);
 
@@ -42,7 +41,6 @@ public class GuiConfig {
     public int browseMenuHeight = 6;
     public String browseMenuTitle = "Browse Emotes";
 
-    public boolean enableConfirmationMenu = true;
     public int confirmationMenuHeight = 1;
     public String confirmationMenuTitle = "Confirm";
 

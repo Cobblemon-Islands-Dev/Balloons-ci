@@ -1,7 +1,7 @@
 package de.tomalbrc.balloons.impl;
 
+import de.tomalbrc.balloons.gui.SelectionGui;
 import de.tomalbrc.balloons.util.ClientboundSetEntityLinkPacketExt;
-import de.tomalbrc.bil.core.element.CollisionElement;
 import de.tomalbrc.bil.core.holder.base.AbstractAnimationHolder;
 import de.tomalbrc.bil.core.holder.wrapper.Bone;
 import de.tomalbrc.bil.core.holder.wrapper.DisplayWrapper;
@@ -10,6 +10,7 @@ import de.tomalbrc.bil.core.model.Pose;
 import eu.pb4.polymer.virtualentity.api.VirtualEntityUtils;
 import eu.pb4.polymer.virtualentity.api.elements.GenericEntityElement;
 import eu.pb4.polymer.virtualentity.api.elements.VirtualElement;
+import eu.pb4.polymer.virtualentity.api.tracker.EntityTrackedData;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.commands.CommandSourceStack;
@@ -20,15 +21,20 @@ import net.minecraft.network.protocol.game.ClientboundBundlePacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityLinkPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import org.joml.*;
+import org.joml.Matrix4f;
+import org.joml.Quaternionfc;
+import org.joml.Vector3fc;
 
-import java.lang.Math;
 import java.util.List;
 
 public class AnimatedBalloonHolder extends AbstractAnimationHolder {
@@ -39,9 +45,14 @@ public class AnimatedBalloonHolder extends AbstractAnimationHolder {
     protected AnimatedBalloonHolder(ServerLevel serverLevel, Model model, boolean leash) {
         super(model, serverLevel);
         this.leash = leash;
-        var slime =  new CollisionElement(VirtualElement.InteractionHandler.EMPTY);
-        slime.setSize(1);
-        this.leashElement = slime;
+        this.leashElement = new BalloonRootElement();
+        this.leashElement.setInteractionHandler(new VirtualElement.InteractionHandler() {
+            @Override
+            public void interact(ServerPlayer player, InteractionHand hand) {
+                var gui = new SelectionGui(player, false);
+                gui.open();
+            }
+        });
         this.addElement(this.leashElement);
     }
 
@@ -54,7 +65,6 @@ public class AnimatedBalloonHolder extends AbstractAnimationHolder {
                 ids.add(bone.element().getEntityId());
             }
 
-
             var ridePacket = VirtualEntityUtils.createRidePacket(this.leashElement.getEntityId(), ids);
             var list = ObjectArrayList.<Packet<? super ClientGamePacketListener>>of(ridePacket);
 
@@ -65,7 +75,7 @@ public class AnimatedBalloonHolder extends AbstractAnimationHolder {
             }
 
             var attributeInstance = new AttributeInstance(Attributes.SCALE, (instance) -> {});
-            attributeInstance.setBaseValue(0.01);
+            attributeInstance.setBaseValue(0.2);
             var attributesPacket = new ClientboundUpdateAttributesPacket(this.leashElement.getEntityId(), List.of(attributeInstance));
             list.add(attributesPacket);
 
@@ -145,5 +155,22 @@ public class AnimatedBalloonHolder extends AbstractAnimationHolder {
         }
 
         return matrix4f;
+    }
+
+    private static class BalloonRootElement extends GenericEntityElement {
+        public BalloonRootElement() {
+            super();
+
+            this.dataTracker.set(EntityTrackedData.SILENT, true);
+            this.dataTracker.set(EntityTrackedData.NO_GRAVITY, true);
+            this.dataTracker.set(EntityTrackedData.FLAGS, (byte) ((1 << EntityTrackedData.INVISIBLE_FLAG_INDEX)));
+        }
+
+        @Override
+        protected EntityType<? extends Entity> getEntityType() {
+            return EntityType.TROPICAL_FISH;
+        }
+
+
     }
 }

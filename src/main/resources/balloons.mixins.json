@@ -4,7 +4,9 @@
   "package": "de.tomalbrc.balloons.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ClientboundSetEntityLinkPacketMixin"
+    "ClientboundSetEntityLinkPacketMixin",
+    "ItemStackMixin",
+    "ServerGamePacketListenerImplMixin"
   ],
   "client": [
   ],
