@@ -52,7 +52,7 @@ public class ModConfig {
 
     public GuiConfig gui = new GuiConfig();
 
-    public StorageUtil.Type storageType = StorageUtil.Type.MARIADB;
+    public StorageUtil.Type storageType = StorageUtil.Type.SQLITE;
     public DatabaseConfig database = new DatabaseConfig.Builder()
             .host("localhost")
             .port(3306)
@@ -60,7 +60,8 @@ public class ModConfig {
             .password("secret")
             .maxPoolSize(10)
             .sslEnabled(false)
-            .database("emotes_db")
+            .database("balloons")
+            .filepath("cosmetic.sqlite")
             .build();
 
     public List<ConfiguredBalloon> balloons = List.of();
