@@ -16,6 +16,7 @@ repositories {
     maven { url = "https://maven.nucleoid.xyz" }
     maven { url = "https://maven.ladysnake.org/releases" }
     maven { url 'https://maven.parchmentmc.org' }
+    mavenCentral()
 }
 
 dependencies {
@@ -49,11 +50,9 @@ dependencies {
     modImplementation include('me.lucko:fabric-permissions-api:0.3.1')
     compileOnly 'net.luckperms:api:5.4'
 
-    implementation include(platform("org.mongodb:mongodb-driver-bom:5.6.1"))
-    implementation include("org.mongodb:mongodb-driver-sync")
-    implementation include("org.mongodb:mongodb-driver-core")
-    implementation include("org.mongodb:bson")
-    implementation include("org.mongodb:bson-kotlin")
+    implementation include("org.mongodb:mongodb-driver-sync:4.9.1")
+    implementation include("org.mongodb:mongodb-driver-core:4.9.1")
+    implementation include("org.mongodb:bson:4.9.1")
     implementation include("com.zaxxer:HikariCP:5.1.0")
     implementation include("org.mariadb.jdbc:mariadb-java-client:3.5.6")
     implementation include("org.postgresql:postgresql:42.7.8")
