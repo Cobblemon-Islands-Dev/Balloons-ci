@@ -43,22 +43,21 @@ The mod reads balloon definitions from:
 config/balloons.json
 ```
 
-**Storage:**
+**Storage options:**
 
 * `storage-type`: Can be `LPMETA`, `MONGODB`, `MARIADB`, `POSTGRESQL`, or `SQLITE`
 * `database`: Defines connection details for databases
 
-**GUI:**
+** `gui`: **
 
-* Customize button positions, items, and menu layouts
+* Customize button positions with the config
 * Adjust menu heights and titles
-* Toggle confirmation menus
 
-** Permissions: **
+** `permissions`: **
 
 Allows to assign vanilla permission levels for the luckperm nodes.
 
-** Messages: **
+** `messages`: **
 
 Player facing messages / strings
 
@@ -138,7 +137,7 @@ Here’s a minimal example:
     "filepath": "cosmetic.sqlite",
     "max-pool-size": 10,
     "ssl-enabled": false,
-    "database-name": "emotes_db",
+    "database-name": "balloon_db",
     "connection-timeout": 30000,
     "idle-timeout": 600000,
     "keepalive-time": 300000,
@@ -179,10 +178,38 @@ Here’s a minimal example:
         "count": 1
       },
       "data": {
-        "model": "apple_balloon"
+        "model": "apple_balloon",
+        "glint": true
       },
       "glint": false,
       "lore": [],
+      "permission-level": 0
+    },
+    {
+      "id": "test:segments",
+      "item": {
+        "id": "minecraft:stone",
+        "count": 1
+      },
+      "data": {
+        "segments": [
+          {
+            "model": "dragon1",
+            "distance": 0.5
+          },
+          {
+            "model": "dragon2",
+            "distance": 0.5
+          },
+          {
+            "model": "dragon3",
+            "distance": 0.5
+          }
+        ],
+        "tilt": false,
+        "model": "dragon_root"
+      },
+      "glint": false,
       "permission-level": 0
     }
   ]
@@ -192,8 +219,11 @@ Here’s a minimal example:
 Each balloon entry includes:
 
 - `id`: Internal identifier for the balloon.
-- `item` (optional): The item used to represent the balloon.
-- `data.model`: The model filename (without extension or path), e.g., `"mynamespace:balloon_model"`.
+- `item` (optional): The item used to represent the balloon. Supports components
+- `title` (optional): Formatted title
+- `lore` (optional): List of formatted lore lines
+- `glint` (optional): Flag whether the balloon has an enchantment glint
+- `data.model`: The model filename (without extension or path), e.g., `"balloon_model"` for balloons from `config/ballons/` or for filament managed models with a namespace: `"mynamespace:balloon_model"`.
 - `data.animation` (optional): Name of the animation to use. Defaults to `"idle"`.
 - `data.show_leash` (optional): Whether the leash is shown. Defaults to `true`.
 - `data.tilt` (optional): Whether the balloon tilts (pitch) while following the entity. Defaults to `true`.
@@ -203,6 +233,12 @@ Each balloon entry includes:
 - `data.bob_frequency` (optional): Frequency of the bobbing motion. Defaults to `0.2`.
 - `data.bob_amplitude` (optional): Amplitude (height) of the bobbing motion. Defaults to `0.2`.
 - `data.offset` (optional): Position offset relative to the attached entity.
+- `data.segments` (optional): List of additional segments for the balloon
+
+Segment format:
+- `model`: Model filename, same as the model for the main balloon segment
+- `animation`: Name of the animation to play
+- `distance`: Distance to the previous segment
 
 ---
 

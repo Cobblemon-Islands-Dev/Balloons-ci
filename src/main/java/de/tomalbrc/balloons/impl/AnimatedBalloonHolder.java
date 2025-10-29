@@ -9,11 +9,14 @@ import de.tomalbrc.bil.core.model.Model;
 import de.tomalbrc.bil.core.model.Pose;
 import eu.pb4.polymer.virtualentity.api.VirtualEntityUtils;
 import eu.pb4.polymer.virtualentity.api.elements.GenericEntityElement;
+import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
 import eu.pb4.polymer.virtualentity.api.elements.VirtualElement;
+import eu.pb4.polymer.virtualentity.api.tracker.DisplayTrackedData;
 import eu.pb4.polymer.virtualentity.api.tracker.EntityTrackedData;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -41,10 +44,12 @@ public class AnimatedBalloonHolder extends AbstractAnimationHolder {
     private final GenericEntityElement leashElement;
     private float yaw, pitch;
     private final boolean leash;
+    private final boolean glint;
 
-    protected AnimatedBalloonHolder(ServerLevel serverLevel, Model model, boolean leash) {
+    protected AnimatedBalloonHolder(ServerLevel serverLevel, Model model, boolean leash, boolean glint) {
         super(model, serverLevel);
         this.leash = leash;
+        this.glint = glint;
         this.leashElement = new BalloonRootElement();
         this.leashElement.setInteractionHandler(new VirtualElement.InteractionHandler() {
             @Override
@@ -54,6 +59,16 @@ public class AnimatedBalloonHolder extends AbstractAnimationHolder {
             }
         });
         this.addElement(this.leashElement);
+    }
+
+    @Override
+    public void initializeDisplay(DisplayWrapper<?> display) {
+        super.initializeDisplay(display);
+        if (glint && display.element() instanceof ItemDisplayElement displayElement) {
+            var item = displayElement.getItem();
+            item.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
+            displayElement.getDataTracker().set(DisplayTrackedData.Item.ITEM, item, true);
+        }
     }
 
     @Override
@@ -75,7 +90,7 @@ public class AnimatedBalloonHolder extends AbstractAnimationHolder {
             }
 
             var attributeInstance = new AttributeInstance(Attributes.SCALE, (instance) -> {});
-            attributeInstance.setBaseValue(0.2);
+            attributeInstance.setBaseValue(0.5);
             var attributesPacket = new ClientboundUpdateAttributesPacket(this.leashElement.getEntityId(), List.of(attributeInstance));
             list.add(attributesPacket);
 
@@ -168,9 +183,7 @@ public class AnimatedBalloonHolder extends AbstractAnimationHolder {
 
         @Override
         protected EntityType<? extends Entity> getEntityType() {
-            return EntityType.TROPICAL_FISH;
+            return EntityType.SILVERFISH;
         }
-
-
     }
 }
