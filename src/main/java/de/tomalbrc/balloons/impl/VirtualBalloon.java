@@ -3,7 +3,6 @@ package de.tomalbrc.balloons.impl;
 import de.tomalbrc.balloons.Models;
 import de.tomalbrc.balloons.component.BalloonProperties;
 import eu.pb4.polymer.virtualentity.api.ElementHolder;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 
 public class VirtualBalloon {
@@ -24,7 +23,7 @@ public class VirtualBalloon {
 
     public void setup(BalloonProperties config) {
         if (config.segments().isEmpty()) {
-            this.animatedHolder = new AnimatedBalloonHolder((ServerLevel) owner.level(), Models.getModel(config.model()), config.showLeash(), config.glint());
+            this.animatedHolder = new AnimatedBalloonHolder(owner, Models.getModel(config.model()), config.showLeash(), config.glint());
             PlayerAttachment.ofTicking(this.getHolder(), this.owner);
             if (config.animation() != null) this.animatedHolder.getAnimator().playAnimation(config.animation());
         } else {

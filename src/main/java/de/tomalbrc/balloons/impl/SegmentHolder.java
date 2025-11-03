@@ -3,7 +3,6 @@ package de.tomalbrc.balloons.impl;
 import de.tomalbrc.balloons.Models;
 import de.tomalbrc.balloons.component.BalloonProperties;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
@@ -28,7 +27,7 @@ public class SegmentHolder {
 
         for (FabrikSegment segment : segments) {
             if (segment == segments.getLast()) {
-                var animatedHolder = new AnimatedBalloonHolder((ServerLevel) owner.level(), Models.getModel(config.model()), config.showLeash(), config.glint());
+                var animatedHolder = new AnimatedBalloonHolder(owner, Models.getModel(config.model()), config.showLeash(), config.glint());
                 PlayerAttachment.ofTicking(animatedHolder, owner);
                 segment.holder = animatedHolder;
 
@@ -36,7 +35,7 @@ public class SegmentHolder {
                     animatedHolder.getAnimator().playAnimation(config.animation());
                 }
             } else {
-                var holder = new AnimatedBalloonHolder((ServerLevel) owner.level(), Models.getModel(segment.segmentData.model()), false, config.glint());
+                var holder = new AnimatedBalloonHolder(owner, Models.getModel(segment.segmentData.model()), false, config.glint());
                 PlayerAttachment.ofTicking(holder, owner);
                 segment.holder = holder;
                 if (segment.segmentData.animation() != null) {

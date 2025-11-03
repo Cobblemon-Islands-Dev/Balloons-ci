@@ -1,5 +1,6 @@
 package de.tomalbrc.balloons;
 
+import com.cobblemonislands.emotive.api.EmoteEvents;
 import com.mojang.logging.LogUtils;
 import de.tomalbrc.balloons.command.BalloonCommand;
 import de.tomalbrc.balloons.component.ModComponents;
@@ -24,6 +25,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -105,6 +107,11 @@ public class Balloons implements ModInitializer {
             despawnBalloon(serverPlayer);
             spawnActive(serverPlayer1);
         });
+
+        if (FabricLoader.getInstance().isModLoaded("emotive")) {
+            EmoteEvents.START_EMOTE.register(Balloons::despawnBalloon);
+            EmoteEvents.STOP_EMOTE.register(Balloons::spawnActive);
+        }
     }
 
     private static void onJoin(ServerGamePacketListenerImpl serverGamePacketListener, PacketSender packetSender, MinecraftServer server) {

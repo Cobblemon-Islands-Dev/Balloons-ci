@@ -75,7 +75,7 @@ public class BalloonCommand {
                 .requires(requirePerm.apply("balloons.give"))
                 .then(argument("player", EntityArgument.player())
                         .then(literal("*").executes(BalloonCommand::handleGiveAll))
-                        .then(argument("balloon", StringArgumentType.word())
+                        .then(argument("balloon", StringArgumentType.greedyString())
                                 .suggests(balloonSuggestions)
                                 .executes(BalloonCommand::handleGive))));
 
@@ -84,7 +84,7 @@ public class BalloonCommand {
                 .requires(requirePerm.apply("balloons.remove"))
                 .then(argument("player", EntityArgument.player())
                         .then(literal("*").executes(BalloonCommand::handleRemoveAll))
-                        .then(argument("balloon", StringArgumentType.word())
+                        .then(argument("balloon", StringArgumentType.greedyString())
                                 .suggests(balloonSuggestions)
                                 .executes(BalloonCommand::handleRemove))));
 

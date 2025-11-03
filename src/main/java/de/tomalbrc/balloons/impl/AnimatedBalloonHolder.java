@@ -45,9 +45,11 @@ public class AnimatedBalloonHolder extends AbstractAnimationHolder {
     private float yaw, pitch;
     private final boolean leash;
     private final boolean glint;
+    private final Entity owner;
 
-    protected AnimatedBalloonHolder(ServerLevel serverLevel, Model model, boolean leash, boolean glint) {
-        super(model, serverLevel);
+    protected AnimatedBalloonHolder(Entity owner, Model model, boolean leash, boolean glint) {
+        super(model, (ServerLevel) owner.level());
+        this.owner = owner;
         this.leash = leash;
         this.glint = glint;
         this.leashElement = new BalloonRootElement();
@@ -84,7 +86,7 @@ public class AnimatedBalloonHolder extends AbstractAnimationHolder {
             var list = ObjectArrayList.<Packet<? super ClientGamePacketListener>>of(ridePacket);
 
             if (this.leash) {
-                var packet = new ClientboundSetEntityLinkPacket(player.player, player.player);
+                var packet = new ClientboundSetEntityLinkPacket(this.owner, this.owner);
                 ((ClientboundSetEntityLinkPacketExt)packet).balloons$setCustomId(this.leashElement.getEntityId());
                 list.add(packet);
             }
