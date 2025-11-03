@@ -55,7 +55,13 @@ dependencies {
     modImplementation("net.fabricmc:fabric-language-kotlin:1.12.3+kotlin.2.0.21")
     modImplementation("com.cobblemon:fabric:1.6.1+1.21.1-SNAPSHOT")
 
-    implementation("de.tomalbrc:db-bundle:1.1.0")
+    implementation include("org.mongodb:mongodb-driver-sync:4.9.1")
+    implementation include("org.mongodb:mongodb-driver-core:4.9.1")
+    implementation include("org.mongodb:bson:4.9.1")
+    implementation include("com.zaxxer:HikariCP:5.1.0")
+    implementation include("org.mariadb.jdbc:mariadb-java-client:3.5.6")
+    implementation include("org.postgresql:postgresql:42.7.8")
+    implementation include("org.xerial:sqlite-jdbc:3.50.3.0")
 }
 
 processResources {
