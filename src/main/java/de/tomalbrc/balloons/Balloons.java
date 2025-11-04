@@ -30,6 +30,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.slf4j.Logger;
 
@@ -100,9 +101,7 @@ public class Balloons implements ModInitializer {
         ServerPlayConnectionEvents.JOIN.register(Balloons::onJoin);
         ServerPlayConnectionEvents.DISCONNECT.register(Balloons::onDisconnect);
 
-        ServerLivingEntityEvents.AFTER_DEATH.register((livingEntity, damageSource) -> {
-            despawnBalloon(livingEntity);
-        });
+        ServerLivingEntityEvents.AFTER_DEATH.register((livingEntity, damageSource) -> despawnBalloon(livingEntity));
         ServerPlayerEvents.COPY_FROM.register((serverPlayer, serverPlayer1, b) -> {
             despawnBalloon(serverPlayer);
             spawnActive(serverPlayer1);
@@ -130,7 +129,7 @@ public class Balloons implements ModInitializer {
         });
     }
 
-    public static void spawnBalloon(LivingEntity livingEntity, ResourceLocation balloonId) {
+    public static void spawnBalloon(Entity livingEntity, ResourceLocation balloonId) {
         if (!(livingEntity.level() instanceof ServerLevel))
             return;
 
@@ -145,7 +144,7 @@ public class Balloons implements ModInitializer {
         virtualBalloon.setup(balloon.data());
     }
 
-    public static void despawnBalloon(LivingEntity livingEntity) {
+    public static void despawnBalloon(Entity livingEntity) {
         var virtualBalloon = SPAWNED_BALLOONS.remove(livingEntity.getUUID());
         if (virtualBalloon != null) {
             virtualBalloon.destroy();

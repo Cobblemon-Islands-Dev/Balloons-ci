@@ -5,7 +5,9 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ClientboundSetEntityLinkPacketMixin",
+    "EntityMixin",
     "ItemStackMixin",
+    "LeashKnotMixin",
     "ServerGamePacketListenerImplMixin"
   ],
   "client": [

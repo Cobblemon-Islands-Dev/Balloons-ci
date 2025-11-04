@@ -3,16 +3,16 @@ package de.tomalbrc.balloons.impl;
 import de.tomalbrc.balloons.Models;
 import de.tomalbrc.balloons.component.BalloonProperties;
 import eu.pb4.polymer.virtualentity.api.ElementHolder;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
 
 public class VirtualBalloon {
-    private final LivingEntity owner;
+    private final Entity owner;
     private BalloonLink follower;
 
     private AnimatedBalloonHolder animatedHolder;
     private SegmentHolder fabrik;
 
-    public VirtualBalloon(LivingEntity owner) {
+    public VirtualBalloon(Entity owner) {
         super();
         this.owner = owner;
     }
