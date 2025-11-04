@@ -92,4 +92,10 @@ public class BalloonFenceLeashKnot extends BlockAttachedEntity implements Polyme
     public @NotNull InteractionResult interact(Player player, InteractionHand interactionHand) {
         return InteractionResult.PASS;
     }
+
+    @Override
+    public void remove(RemovalReason removalReason) {
+        Balloons.despawnBalloon(this);
+        super.remove(removalReason);
+    }
 }
