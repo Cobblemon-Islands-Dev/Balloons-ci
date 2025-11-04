@@ -26,12 +26,18 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobCategory;
 import org.slf4j.Logger;
 
 import java.util.Map;
@@ -70,6 +76,7 @@ public class Balloons implements ModInitializer {
     @Override
     public void onInitialize() {
         ModComponents.register();
+        ModEntities.init();
 
         CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> BalloonCommand.register(dispatcher));
 
@@ -86,7 +93,7 @@ public class Balloons implements ModInitializer {
             TrinketCompat.init();
         }
 
-        ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
+        ServerLifecycleEvents.SERVER_STARTING.register(minecraftServer -> {
             // load configs
             ModConfig.load();
             for (ConfiguredBalloon configBalloon : ModConfig.getInstance().balloons) {

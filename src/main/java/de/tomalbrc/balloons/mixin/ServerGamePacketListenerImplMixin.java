@@ -1,11 +1,11 @@
 package de.tomalbrc.balloons.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import de.tomalbrc.balloons.BalloonFenceLeashKnot;
 import de.tomalbrc.balloons.Balloons;
 import de.tomalbrc.balloons.component.BalloonToken;
 import de.tomalbrc.balloons.component.ModComponents;
 import de.tomalbrc.balloons.config.ModConfig;
-import de.tomalbrc.balloons.util.BalloonHolderEntity;
 import de.tomalbrc.balloons.util.TextUtil;
 import de.tomalbrc.balloons.util.Util;
 import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
@@ -51,10 +51,9 @@ public class ServerGamePacketListenerImplMixin {
             BalloonToken token = itemStack.get(ModComponents.TOKEN);
 
             if (token != null && isFence) {
-                LeashFenceKnotEntity knotEntity = Util.createKnot(player.level(), pos);
+                BalloonFenceLeashKnot knotEntity = Util.createKnot(player.level(), pos);
                 if (knotEntity != null) {
-                    ((BalloonHolderEntity) knotEntity).balloons$setBalloon(token.id());
-
+                    knotEntity.setBalloonId(token.id());
                     Balloons.spawnBalloon(knotEntity, token.id());
 
                     itemStack.consume(1, player);

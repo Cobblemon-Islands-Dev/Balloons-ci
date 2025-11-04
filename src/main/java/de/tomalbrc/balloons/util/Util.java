@@ -1,5 +1,6 @@
 package de.tomalbrc.balloons.util;
 
+import de.tomalbrc.balloons.BalloonFenceLeashKnot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -26,18 +27,18 @@ public class Util {
         player.playNotifySound(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.MASTER, 0.5f, 1F);
     }
 
-    public static LeashFenceKnotEntity createKnot(Level level, BlockPos blockPos) {
+    public static BalloonFenceLeashKnot createKnot(Level level, BlockPos blockPos) {
         int x = blockPos.getX();
         int y = blockPos.getY();
         int z = blockPos.getZ();
 
-        for (LeashFenceKnotEntity leashFenceKnotEntity : level.getEntitiesOfClass(LeashFenceKnotEntity.class, new AABB(x - 1.0F, y - 1.0F, z - 1.0F, x + 1.0F, y + 1.0F, z + 1.0F))) {
-            if (leashFenceKnotEntity.getPos().equals(blockPos)) {
+        for (BalloonFenceLeashKnot entity : level.getEntitiesOfClass(BalloonFenceLeashKnot.class, new AABB(x - 1.0F, y - 1.0F, z - 1.0F, x + 1.0F, y + 1.0F, z + 1.0F))) {
+            if (entity.getPos().equals(blockPos)) {
                 return null;
             }
         }
 
-        LeashFenceKnotEntity leashFenceKnotEntity2 = new LeashFenceKnotEntity(level, blockPos);
+        BalloonFenceLeashKnot leashFenceKnotEntity2 = new BalloonFenceLeashKnot(level, blockPos);
         level.addFreshEntity(leashFenceKnotEntity2);
         return leashFenceKnotEntity2;
     }

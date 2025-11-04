@@ -4,6 +4,7 @@ import de.tomalbrc.balloons.Models;
 import de.tomalbrc.balloons.component.BalloonProperties;
 import eu.pb4.polymer.virtualentity.api.ElementHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 public class VirtualBalloon {
     private final Entity owner;
@@ -32,7 +33,7 @@ public class VirtualBalloon {
         }
 
         this.follower = new BalloonLink(
-                this.owner.position().add(config.offset()),
+                this.owner.position().add(new Vec3(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).scale(3.5)),
                 config.followSpeed(),
                 config.drag(),
                 config.bobFrequency(),
