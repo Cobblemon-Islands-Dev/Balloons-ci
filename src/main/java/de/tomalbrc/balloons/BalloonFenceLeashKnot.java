@@ -38,10 +38,6 @@ public class BalloonFenceLeashKnot extends BlockAttachedEntity implements Polyme
         this.balloonId = balloonId;
     }
 
-    public ResourceLocation getBalloonId() {
-        return this.balloonId;
-    }
-
     @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
@@ -54,7 +50,7 @@ public class BalloonFenceLeashKnot extends BlockAttachedEntity implements Polyme
     @Override
     public void dropItem(@Nullable Entity entity) {
         var configuredBalloon = Balloons.all().get(balloonId);
-        var item = configuredBalloon.item();
+        var item = configuredBalloon.itemStack();
         item.set(ModComponents.TOKEN, new BalloonToken(configuredBalloon.id(), configuredBalloon.permission(), null));
         spawnAtLocation(item);
         Balloons.despawnBalloon(this);

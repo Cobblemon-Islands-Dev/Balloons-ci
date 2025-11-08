@@ -1,6 +1,7 @@
 package de.tomalbrc.balloons;
 
 import com.cobblemonislands.emotive.api.EmoteEvents;
+import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
 import de.tomalbrc.balloons.command.BalloonCommand;
 import de.tomalbrc.balloons.component.ModComponents;
@@ -10,6 +11,7 @@ import de.tomalbrc.balloons.filament.FilamentCompat;
 import de.tomalbrc.balloons.filament.TrinketCompat;
 import de.tomalbrc.balloons.filament.VanillaCompat;
 import de.tomalbrc.balloons.impl.VirtualBalloon;
+import de.tomalbrc.balloons.storage.CachedBalloonsStorageProxy;
 import de.tomalbrc.balloons.storage.DatabaseConfig;
 import de.tomalbrc.balloons.storage.MongoStorage;
 import de.tomalbrc.balloons.storage.hikari.MariaStorage;
@@ -26,18 +28,12 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobCategory;
 import org.slf4j.Logger;
 
 import java.util.Map;
@@ -62,11 +58,8 @@ public class Balloons implements ModInitializer {
         UNGROUPED.put(id, balloon);
     }
 
-    public static Map<ResourceLocation, ConfiguredBalloon> all() {
-        Map<ResourceLocation, ConfiguredBalloon> map = new Object2ObjectArrayMap<>();
-        map.putAll(GROUPED);
-        map.putAll(UNGROUPED);
-        return map;
+    public static ImmutableMap<ResourceLocation, ConfiguredBalloon> all() {
+        return ImmutableMap.<ResourceLocation, ConfiguredBalloon>builder().putAll(GROUPED).putAll(UNGROUPED).build();
     }
 
     public static StorageUtil.Provider STORAGE = null;
@@ -99,6 +92,8 @@ public class Balloons implements ModInitializer {
             for (ConfiguredBalloon configBalloon : ModConfig.getInstance().balloons) {
                 addUngrouped(configBalloon.id(), configBalloon);
             }
+            BalloonFiles.load();
+           // Categories.load();
 
             STORAGE = getStorage();
         });
@@ -126,6 +121,7 @@ public class Balloons implements ModInitializer {
 
     private static void onDisconnect(ServerGamePacketListenerImpl serverGamePacketListener, MinecraftServer server) {
         despawnBalloon(serverGamePacketListener.player);
+        Balloons.getStorage().invalidate(serverGamePacketListener.player.getUUID());
     }
 
     private static void onTick(MinecraftServer server) {
@@ -141,6 +137,9 @@ public class Balloons implements ModInitializer {
             return;
 
         var balloon = Balloons.all().get(balloonId);
+        if (balloon == null)
+            return;
+
         var virtualBalloon = new VirtualBalloon(livingEntity);
 
         var old = SPAWNED_BALLOONS.put(livingEntity.getUUID(), virtualBalloon);
@@ -181,6 +180,8 @@ public class Balloons implements ModInitializer {
         } else {
             STORAGE = new SqliteStorage(dbConfig);
         }
+
+        STORAGE = new CachedBalloonsStorageProxy(STORAGE);
 
         return STORAGE;
     }

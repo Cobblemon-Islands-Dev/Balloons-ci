@@ -1,6 +1,6 @@
 package de.tomalbrc.balloons.impl;
 
-import de.tomalbrc.balloons.gui.SelectionGui;
+import de.tomalbrc.balloons.configui.impl.selection.SelectionGui;
 import de.tomalbrc.balloons.util.ClientboundSetEntityLinkPacketExt;
 import de.tomalbrc.bil.core.holder.base.AbstractAnimationHolder;
 import de.tomalbrc.bil.core.holder.wrapper.Bone;
@@ -56,7 +56,7 @@ public class AnimatedBalloonHolder extends AbstractAnimationHolder {
         this.leashElement.setInteractionHandler(new VirtualElement.InteractionHandler() {
             @Override
             public void interact(ServerPlayer player, InteractionHand hand) {
-                var gui = new SelectionGui(player, false);
+                var gui = new SelectionGui(player);
                 gui.open();
             }
         });
@@ -104,10 +104,6 @@ public class AnimatedBalloonHolder extends AbstractAnimationHolder {
 
     public void setPosition(Vec3 position) {
         this.leashElement.setOverridePos(position);
-    }
-
-    public int leashedEntityId() {
-        return this.leashElement.getEntityId();
     }
 
     public void setYaw(float yaw) {

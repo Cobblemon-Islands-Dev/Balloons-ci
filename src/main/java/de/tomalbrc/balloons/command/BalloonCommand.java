@@ -4,9 +4,11 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import de.tomalbrc.balloons.BalloonFiles;
 import de.tomalbrc.balloons.Balloons;
+import de.tomalbrc.balloons.Categories;
 import de.tomalbrc.balloons.config.ModConfig;
-import de.tomalbrc.balloons.gui.SelectionGui;
+import de.tomalbrc.balloons.configui.impl.selection.SelectionGui;
 import de.tomalbrc.balloons.util.StorageUtil;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
@@ -53,7 +55,11 @@ public class BalloonCommand {
         root = root.then(literal("reload")
                 .requires(requirePerm.apply("balloons.reload"))
                 .executes(ctx -> {
+                    Balloons.UNGROUPED.clear();
+                    Balloons.GROUPED.clear();
                     ModConfig.load();
+                    BalloonFiles.load();
+                    Categories.load();
                     ctx.getSource().sendSuccess(() -> Component.literal("Balloons config reloaded."), false);
                     return Command.SINGLE_SUCCESS;
                 }));
@@ -107,7 +113,7 @@ public class BalloonCommand {
         ServerPlayer player = ctx.getSource().getPlayer();
         if (player == null) return 0;
 
-        SelectionGui gui = new SelectionGui(player, false);
+        SelectionGui gui = new SelectionGui(player);
         boolean opened = gui.open();
 
         return opened ? Command.SINGLE_SUCCESS : 0;
