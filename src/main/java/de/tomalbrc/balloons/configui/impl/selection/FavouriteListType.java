@@ -33,6 +33,7 @@ class FavouriteListType implements ListGuiElementType<GuiElementData, Configured
             } else if (c == ClickType.MOUSE_LEFT && !isActive) {
                 Balloons.getStorage().setActive(gui.getPlayer().getUUID(), element.id());
                 Balloons.spawnActive(gui.getPlayer());
+                gui.close();
             }
         });
     }
