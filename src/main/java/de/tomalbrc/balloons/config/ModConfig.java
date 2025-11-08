@@ -65,8 +65,32 @@ public class ModConfig {
             'N', new GuiElementData("next_page", "Next Page", Items.ARROW.getDefaultInstance(), List.of(), List.of(), false),
             'P', new GuiElementData("prev_page", "Previous Page", Items.ARROW.getDefaultInstance(), List.of(), List.of(), false),
             'B', new GuiElementData("browse", "Browse all Balloons", Items.CHEST.getDefaultInstance(), List.of(), List.of(), false),
-            'E', new GuiElementData("contents", null, Items.EMERALD.getDefaultInstance(), List.of("", "<green>🎈</green> Press <keybind:key.attack> to equip", "", "<color:#800080>↔</color> Press <keybind:key.use> to get as item", "", "<color:#800080>↔</color> Press <keybind:key.sneak> + <keybind:key.attack> to add to favourites"), List.of(), false),
-            'F', new GuiElementData("favourites", null, Items.DIAMOND.getDefaultInstance(), List.of("", "<green>🎈</green> Press <keybind:key.attack> to equip", "", "<color:#800080>↔</color> Press <keybind:key.use> to unequip", "", "<color:#800080>↔</color> Press <keybind:key.sneak> + <keybind:key.attack> to add to favourites"), List.of(), false)
+            'E', new GuiElementData("contents", null, Items.EMERALD.getDefaultInstance(),
+                    List.of("",
+                            "<green>🎈</green> Press <keybind:key.attack> to equip",
+                            "",
+                            "<color:#800080>↔</color> Press <keybind:key.use> to get as item",
+                            "",
+                            "<color:#800080>★</color> Press <keybind:key.sneak> + <keybind:key.attack> to add to favourites"),
+                    List.of("",
+                            "<green>🎈</green> Press <keybind:key.attack> to equip",
+                            "",
+                            "<color:#800080>↔</color> Press <keybind:key.use> to unequip",
+                            "",
+                            "<color:#800080>★</color> Press <keybind:key.sneak> + <keybind:key.attack> to add to favourites"), false),
+            'F', new GuiElementData("favourites", null, Items.DIAMOND.getDefaultInstance(),
+                    List.of("",
+                            "<green>🎈</green> Press <keybind:key.attack> to equip",
+                            "",
+                            "<color:#800080>↔</color> Press <keybind:key.use> to unequip",
+                            "",
+                            "<color:#800080>☆</color> Press <keybind:key.sneak> + <keybind:key.attack> to remove from favourites"),
+                    List.of("",
+                            "<green>🎈</green> Press <keybind:key.attack> to equip",
+                            "",
+                            "<color:#800080>↔</color> Press <keybind:key.use> to equip",
+                            "",
+                            "<color:#800080>☆</color> Press <keybind:key.sneak> + <keybind:key.attack> to remove from favourites"), false)
     ), false);
 
     public GuiData<GuiElementData> browseGui = new GuiData<>("Browse Balloons", List.of(
@@ -81,7 +105,9 @@ public class ModConfig {
             'N', new GuiElementData("next_page", "Next Page", Items.ARROW.getDefaultInstance(), List.of(), List.of(), false),
             'P', new GuiElementData("prev_page", "Previous Page", Items.ARROW.getDefaultInstance(), List.of(), List.of(), false),
             'B', new GuiElementData("back", "Back", Items.ARROW.getDefaultInstance(), List.of(), List.of(), false),
-            'E', new GuiElementData("contents", null, Items.EMERALD.getDefaultInstance(), List.of("", "<gold>You do not own this balloon!"), List.of("", "<green>You own this balloon!"), false)
+            'E', new GuiElementData("contents", null, Items.EMERALD.getDefaultInstance(),
+                    List.of("", "<gold>You do not own this balloon!"),
+                    List.of("", "<green>You own this balloon!"), false)
     ), false);
 
     public GuiData<GuiElementData> confirmationGui = new GuiData<>("Confirm", List.of(
@@ -129,8 +155,7 @@ public class ModConfig {
                 throw new RuntimeException(e);
             }
             return true;
-        }
-        else try {
+        } else try {
             ModConfig.instance = JSON.fromJson(new FileReader(ModConfig.CONFIG_FILE_PATH.toFile()), ModConfig.class);
 
             if (instance != null) {

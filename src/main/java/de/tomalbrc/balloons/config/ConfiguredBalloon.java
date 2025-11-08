@@ -1,5 +1,6 @@
 package de.tomalbrc.balloons.config;
 
+import com.google.common.collect.ImmutableMap;
 import de.tomalbrc.balloons.component.BalloonProperties;
 import de.tomalbrc.balloons.util.TextUtil;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
@@ -12,7 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -74,19 +74,10 @@ public class ConfiguredBalloon {
         return permissionLevel;
     }
 
-    public GuiElementBuilder guiElementBuilder() {
-        GuiElementBuilder builder = GuiElementBuilder.from(item == null ? Items.PAPER.getDefaultInstance() : item);
-        builder.setName(title == null ? Component.literal(id.toString()) : TextUtil.parse(title));
-        if (lore != null) {
-            for (String string : lore) {
-                builder.addLoreLine(Component.empty().withStyle(EMPTY).append(TextUtil.parse(string)));
-            }
-        }
-        builder.glow(glint);
-        return builder;
-    }
-
     public Map<String, String> placeholder() {
-        return Collections.EMPTY_MAP;
+        return ImmutableMap.of(
+                "<title>", title,
+                "<id>", id.toString()
+        );
     }
 }

@@ -6,7 +6,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import de.tomalbrc.balloons.BalloonFiles;
 import de.tomalbrc.balloons.Balloons;
-import de.tomalbrc.balloons.Categories;
 import de.tomalbrc.balloons.config.ModConfig;
 import de.tomalbrc.balloons.configui.impl.selection.SelectionGui;
 import de.tomalbrc.balloons.util.StorageUtil;
@@ -59,7 +58,7 @@ public class BalloonCommand {
                     Balloons.GROUPED.clear();
                     ModConfig.load();
                     BalloonFiles.load();
-                    Categories.load();
+                    //Categories.load();
                     ctx.getSource().sendSuccess(() -> Component.literal("Balloons config reloaded."), false);
                     return Command.SINGLE_SUCCESS;
                 }));
